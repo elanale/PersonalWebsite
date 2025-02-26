@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import Head from 'next/head';
 import Script from 'next/script';
 
@@ -13,7 +13,8 @@ export default function Home() {
     }
   };
 
-  const initAnimations = () => {
+  // Wrap the animation initialization in a useCallback to satisfy ESLint
+  const initAnimations = useCallback(() => {
     if (!initialized && window.gsap && window.ScrollTrigger) {
       const gsap = window.gsap;
       gsap.registerPlugin(window.ScrollTrigger);
@@ -45,14 +46,13 @@ export default function Home() {
 
       setInitialized(true);
     }
-  };
+  }, [initialized]);
 
-  // In case the scripts load before this effect runs
   useEffect(() => {
     if (window.gsap && window.ScrollTrigger) {
       initAnimations();
     }
-  }, [initialized]);
+  }, [initAnimations]);
 
   return (
     <>
@@ -73,12 +73,12 @@ export default function Home() {
 
       <div className="container">
         <header className="header">
-          <h2>Scroll Animation Demo</h2>
+          <h2>Scroll Animmmmmation Demo</h2>
         </header>
         <main className="main">
           <section className="section" ref={addToRefs}>
             <div className="text">
-              <h1>Hello, I'm Your Name!</h1>
+              <h1>Hello, I&apos;m Your Name!</h1>
             </div>
           </section>
           <section className="section" ref={addToRefs}>
