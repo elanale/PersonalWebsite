@@ -22,7 +22,6 @@ export default function Home() {
 
       sectionRefs.current.forEach((el, index, arr) => {
         const isLast = index === arr.length - 1;
-
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: el,
@@ -32,34 +31,68 @@ export default function Home() {
           },
         });
 
-        // Use the module's .text class
+        // Select the element to animate
         const textElement = el.querySelector(`.${styles.text}`);
 
         // Optimize rendering
         tl.set(textElement, { willChange: 'transform, opacity' });
 
-        // Text enters from the left
-        tl.fromTo(
-          textElement,
-          { x: '-100%', autoAlpha: 0 },
-          {
-            x: '0%',
-            autoAlpha: 1,
-            duration: 1,
-            ease: 'power2.out',
-            immediateRender: false,
+        if (isLast) {
+          // For the last box, animate from bottom to center (no exit tween)
+          tl.fromTo(
+            textElement,
+            { y: '100%', autoAlpha: 0 },
+            {
+              y: '0%',
+              autoAlpha: 1,
+              duration: 1,
+              ease: 'power2.out',
+              immediateRender: false,
+            }
+          );
+        } else {
+          // For alternating boxes:
+          if (index % 2 === 0) {
+            // Even index: Animate from left to center, then exit to right
+            tl.fromTo(
+              textElement,
+              { x: '-100%', autoAlpha: 0 },
+              {
+                x: '0%',
+                autoAlpha: 1,
+                duration: 1,
+                ease: 'power2.out',
+                immediateRender: false,
+              }
+            );
+            tl.to(textElement, {
+              x: '100%',
+              autoAlpha: 0,
+              duration: 1,
+              ease: 'power2.in',
+              immediateRender: false,
+            });
+          } else {
+            // Odd index: Animate from right to center, then exit to left
+            tl.fromTo(
+              textElement,
+              { x: '100%', autoAlpha: 0 },
+              {
+                x: '0%',
+                autoAlpha: 1,
+                duration: 1,
+                ease: 'power2.out',
+                immediateRender: false,
+              }
+            );
+            tl.to(textElement, {
+              x: '-100%',
+              autoAlpha: 0,
+              duration: 1,
+              ease: 'power2.in',
+              immediateRender: false,
+            });
           }
-        );
-
-        // If not the last box, animate exit to the right
-        if (!isLast) {
-          tl.to(textElement, {
-            x: '100%',
-            autoAlpha: 0,
-            duration: 1,
-            ease: 'power2.in',
-            immediateRender: false,
-          });
         }
       });
 
@@ -100,27 +133,35 @@ export default function Home() {
               <h1>Welcome to...</h1>
             </div>
           </section>
+
           <section className={styles.section} ref={addToRefs}>
             <div className={styles.text}>
-              <h2>
-                an interactive website where you will find all my projects and skills.
-              </h2>
+              <h1>My Webpage...</h1>
             </div>
           </section>
-          {/* Last box: No exit to the right, shorter height to reach footer quickly */}
+          
+          <section className={styles.section} ref={addToRefs}>
+            <div className={styles.text}>
+              <h1>
+                where you will find my projects and skills...
+              </h1>
+            </div>
+          </section>
+
+          {/* Last box: Animates from bottom to center */}
           <section
             className={`${styles.section} ${styles.lastSection}`}
             ref={addToRefs}
           >
             <div className={styles.text}>
-              <h1>
-                 Begin to Explore
-              </h1>
+              <h1>Explore Now</h1>
             </div>
           </section>
         </main>
         <footer className={styles.footer}>
-          <p>&copy; {new Date().getFullYear()} David Elan Wygodski || All rights reserved</p>
+          <p>
+            &copy; {new Date().getFullYear()} David Elan Wygodski || All rights reserved
+          </p>
         </footer>
       </div>
     </>

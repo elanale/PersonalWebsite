@@ -1,7 +1,7 @@
 /* styles/Home.module.css */
 .container {
   font-family: 'Helvetica Neue', sans-serif;
-  background: linear-gradient(135deg, #4277e3, #000000);
+  background: linear-gradient(135deg, #c46302e3, #0401a1);
   color: #ffffff;
   min-height: 100vh;
 }
@@ -14,17 +14,19 @@
   background: rgb(0, 0, 0);
   backdrop-filter: blur(5px);
   z-index: 1000;
-  padding: 15px 20px;
+  padding: 4px 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .header h2 {
   margin: 0;
   font-size: 1.5rem;
   letter-spacing: 2px;
+  text-align: center;
 }
 
 .main {
@@ -67,9 +69,9 @@
 }
 
 .footer {
-  min-height: 50px;
+  min-height: 5px;
   text-align: center;
-  padding: 20px;
+  padding: 1px;
   background: rgba(33, 0, 0, 0.9);
 }
 
