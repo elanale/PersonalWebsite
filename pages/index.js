@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import Script from 'next/script';
 
 export default function Home() {
   const sectionRefs = useRef([]);
+  const [initialized, setInitialized] = useState(false);
 
   // Collect references to each section element
   const addToRefs = (el) => {
@@ -12,16 +13,13 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    // Ensure GSAP and ScrollTrigger are loaded
-    if (typeof window !== 'undefined' && window.gsap && window.ScrollTrigger) {
+  const initAnimations = () => {
+    if (!initialized && window.gsap && window.ScrollTrigger) {
       const gsap = window.gsap;
-      const ScrollTrigger = window.ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(window.ScrollTrigger);
 
       // Animate each section's text with a timeline
       sectionRefs.current.forEach((el) => {
-        // Create a timeline that will animate as you scroll through the section
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: el,
@@ -31,21 +29,30 @@ export default function Home() {
           },
         });
 
-        // First animation: Text enters from the left (from offscreen left to center)
+        // First animation: Text enters from the left
         tl.fromTo(
           el.querySelector('.text'),
           { x: '-100%', autoAlpha: 0 },
           { x: '0%', autoAlpha: 1, duration: 1 }
         );
 
-        // Second animation: As you scroll further, text exits to the right (from center to offscreen right)
+        // Second animation: Text exits to the right
         tl.to(
           el.querySelector('.text'),
           { x: '100%', autoAlpha: 0, duration: 1 }
         );
       });
+
+      setInitialized(true);
     }
-  }, []);
+  };
+
+  // In case the scripts load before this effect runs
+  useEffect(() => {
+    if (window.gsap && window.ScrollTrigger) {
+      initAnimations();
+    }
+  }, [initialized]);
 
   return (
     <>
@@ -53,7 +60,7 @@ export default function Home() {
         <title>Scroll Animation Example</title>
         <meta name="description" content="GSAP scroll animation demo in one file" />
       </Head>
-      {/* Load GSAP and ScrollTrigger */}
+      {/* Load GSAP and ScrollTrigger via CDN */}
       <Script 
         src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js" 
         strategy="afterInteractive" 
@@ -61,35 +68,36 @@ export default function Home() {
       <Script 
         src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js" 
         strategy="afterInteractive" 
+        onLoad={initAnimations}
       />
 
       <div className="container">
         <header className="header">
-          <h2>Elan Wygodski</h2>
+          <h2>Scroll Animation Demo</h2>
         </header>
         <main className="main">
           <section className="section" ref={addToRefs}>
             <div className="text">
-              <h1>Hello</h1>
+              <h1>Hello, I'm Your Name!</h1>
             </div>
           </section>
           <section className="section" ref={addToRefs}>
             <div className="text">
               <p>
-                This is my interactive personal website!
+                This is my interactive website. Scroll down to see the text animate from left to right!
               </p>
             </div>
           </section>
           <section className="section" ref={addToRefs}>
             <div className="text">
               <p>
-                Full Website coming soon!
+                Enjoy the animation as the text slides in and then exits smoothly.
               </p>
             </div>
           </section>
         </main>
         <footer className="footer">
-          <p>&copy; {new Date().getFullYear()} Elan Wygodski. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Your Name. All rights reserved.</p>
         </footer>
       </div>
 
