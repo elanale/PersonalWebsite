@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Head from 'next/head';
 import Script from 'next/script';
+import styles from '../styles/Home.module.css'; // Import the CSS module
 
 export default function Home() {
   const sectionRefs = useRef([]);
@@ -13,35 +14,53 @@ export default function Home() {
     }
   };
 
-  // Wrap the animation initialization in a useCallback to satisfy ESLint
+  // Initialize GSAP animations
   const initAnimations = useCallback(() => {
     if (!initialized && window.gsap && window.ScrollTrigger) {
       const gsap = window.gsap;
       gsap.registerPlugin(window.ScrollTrigger);
 
-      // Animate each section's text with a timeline
-      sectionRefs.current.forEach((el) => {
+      sectionRefs.current.forEach((el, index, arr) => {
+        const isLast = index === arr.length - 1;
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: el,
             start: 'top center',
             end: 'bottom center',
-            scrub: true,
+            scrub: 1,
           },
         });
 
-        // First animation: Text enters from the left
+        // Use the module's .text class
+        const textElement = el.querySelector(`.${styles.text}`);
+
+        // Optimize rendering
+        tl.set(textElement, { willChange: 'transform, opacity' });
+
+        // Text enters from the left
         tl.fromTo(
-          el.querySelector('.text'),
+          textElement,
           { x: '-100%', autoAlpha: 0 },
-          { x: '0%', autoAlpha: 1, duration: 1 }
+          {
+            x: '0%',
+            autoAlpha: 1,
+            duration: 1,
+            ease: 'power2.out',
+            immediateRender: false,
+          }
         );
 
-        // Second animation: Text exits to the right
-        tl.to(
-          el.querySelector('.text'),
-          { x: '100%', autoAlpha: 0, duration: 1 }
-        );
+        // If not the last box, animate exit to the right
+        if (!isLast) {
+          tl.to(textElement, {
+            x: '100%',
+            autoAlpha: 0,
+            duration: 1,
+            ease: 'power2.in',
+            immediateRender: false,
+          });
+        }
       });
 
       setInitialized(true);
@@ -58,85 +77,52 @@ export default function Home() {
     <>
       <Head>
         <title>Scroll Animation Example</title>
-        <meta name="description" content="GSAP scroll animation demo in one file" />
+        <meta name="description" content="GSAP scroll animation with Next.js" />
       </Head>
       {/* Load GSAP and ScrollTrigger via CDN */}
-      <Script 
-        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js" 
-        strategy="afterInteractive" 
+      <Script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"
+        strategy="afterInteractive"
       />
-      <Script 
-        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js" 
-        strategy="afterInteractive" 
+      <Script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"
+        strategy="afterInteractive"
         onLoad={initAnimations}
       />
 
-      <div className="container">
-        <header className="header">
-          <h2>Scroll Animmmmmation Demo</h2>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <h2>David Elan Wygodski</h2>
         </header>
-        <main className="main">
-          <section className="section" ref={addToRefs}>
-            <div className="text">
-              <h1>Hello, I&apos;m Your Name!</h1>
+        <main className={styles.main}>
+          <section className={styles.section} ref={addToRefs}>
+            <div className={styles.text}>
+              <h1>Welcome to...</h1>
             </div>
           </section>
-          <section className="section" ref={addToRefs}>
-            <div className="text">
-              <p>
-                This is my interactive website. Scroll down to see the text animate from left to right!
-              </p>
+          <section className={styles.section} ref={addToRefs}>
+            <div className={styles.text}>
+              <h2>
+                an interactive website where you will find all my projects and skills.
+              </h2>
             </div>
           </section>
-          <section className="section" ref={addToRefs}>
-            <div className="text">
-              <p>
-                Enjoy the animation as the text slides in and then exits smoothly.
-              </p>
+          {/* Last box: No exit to the right, shorter height to reach footer quickly */}
+          <section
+            className={`${styles.section} ${styles.lastSection}`}
+            ref={addToRefs}
+          >
+            <div className={styles.text}>
+              <h1>
+                 Begin to Explore
+              </h1>
             </div>
           </section>
         </main>
-        <footer className="footer">
-          <p>&copy; {new Date().getFullYear()} Your Name. All rights reserved.</p>
+        <footer className={styles.footer}>
+          <p>&copy; {new Date().getFullYear()} David Elan Wygodski || All rights reserved</p>
         </footer>
       </div>
-
-      {/* Styled-JSX for component-specific styles */}
-      <style jsx>{`
-        .container {
-          font-family: Arial, sans-serif;
-        }
-        .header {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          background: #fff;
-          z-index: 1000;
-          padding: 10px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .main {
-          padding-top: 60px;
-        }
-        .section {
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-        }
-        .text {
-          width: 100%;
-          text-align: center;
-        }
-        .footer {
-          min-height: 50px;
-          text-align: center;
-          padding: 20px;
-          background: #f1f1f1;
-        }
-      `}</style>
     </>
   );
 }
