@@ -1,3 +1,102 @@
+// Create the intro overlay container
+if (typeof window !== 'undefined') {
+  document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.createElement("div");
+    overlay.id = "introOverlay";
+    overlay.style.position = "fixed";
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(15, 32, 39, 0.75)";
+    overlay.style.zIndex = "9999";
+    overlay.style.color = "#f1f1f1";
+    overlay.style.display = "flex";
+    overlay.style.flexDirection = "column";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.textAlign = "center";
+overlay.style.backdropFilter = "blur(3px)";
+    overlay.style.opacity = 1;
+    overlay.style.transition = "opacity 0.6s ease";
+
+    const title = document.createElement("h1");
+    title.innerText = "Before You Explore";
+    title.style.fontSize = "2.5rem";
+    title.style.marginBottom = "1rem";
+
+    const message = document.createElement("p");
+    message.innerText = "Please agree to our terms before using the application.";
+    message.style.fontSize = "1.2rem";
+    message.style.maxWidth = "600px";
+    message.style.marginBottom = "1.5rem";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "agreeCheckbox";
+    checkbox.style.marginTop = "10px";
+    checkbox.style.transform = "scale(1.2)";
+
+    const label = document.createElement("label");
+    label.htmlFor = "agreeCheckbox";
+    label.innerText = " I agree to the Terms & Conditions";
+    label.style.marginLeft = "10px";
+    label.style.fontSize = "1rem";
+    label.style.color = "#f1f1f1";
+
+    const checkboxContainer = document.createElement("div");
+    checkboxContainer.style.display = "flex";
+    checkboxContainer.style.alignItems = "center";
+    checkboxContainer.style.justifyContent = "center";
+    checkboxContainer.style.marginBottom = "1.5rem";
+    checkboxContainer.appendChild(checkbox);
+    checkboxContainer.appendChild(label);
+
+    const button = document.createElement("button");
+    button.innerText = "I Understand";
+    button.style.marginTop = "10px";
+    button.style.padding = "12px 24px";
+    button.style.fontSize = "1rem";
+    button.style.background = "#00c6ff";
+    button.style.border = "none";
+    button.style.borderRadius = "6px";
+    button.style.color = "black";
+    button.style.cursor = "pointer";
+    button.disabled = true;
+    button.style.opacity = 0.6;
+
+    checkbox.addEventListener("change", () => {
+      button.disabled = !checkbox.checked;
+      button.style.opacity = checkbox.checked ? 1 : 0.6;
+    });
+
+    button.onclick = () => {
+      overlay.style.opacity = 0;
+      document.body.classList.remove("lock-scroll");
+      setTimeout(() => overlay.style.display = "none", 600);
+    };
+
+    overlay.appendChild(title);
+    overlay.appendChild(message);
+    overlay.appendChild(checkboxContainer);
+    overlay.appendChild(button);
+    document.body.appendChild(overlay);
+    document.body.classList.add("lock-scroll");
+  });
+
+  // Optional: Lock scrolling via CSS injection
+  const style = document.createElement("style");
+  style.textContent = `
+    body.lock-scroll {
+      overflow: hidden;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+
+
+
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import axios from "axios";

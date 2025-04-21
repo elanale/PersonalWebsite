@@ -19,22 +19,55 @@ a {
 
 .controls {
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(251, 249, 249, 0.9);
   color: black;
-  border-top: 1px solid #ccc;
+  border-radius: 2rem;
+  border-color: blue;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   padding: 1rem;
-  position: absolute;
-  bottom: 0;
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 768px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.5); /* <-- transparency level */
+  backdrop-filter: blur(4px);         /* <-- blur strength */
+  border-top: 3px solid rgb(9, 141, 241);
+border-bottom: 3px solid rgb(9, 141, 241);
+
+}
+
+.controls .row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2.5rem;
   width: 100%;
 }
 
-.controls input,
-.controls button {
+.controls input {
   padding: 0.5rem;
   border: 1px solid #888;
   background: white;
   color: black;
   border-radius: 5px;
+  text-align: center;
+  margin: 0 0.2rem;
+}
+
+.controls button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #888;
+  background: white;
+  color: black;
+  border-radius: 5px;
+  text-align: center;
+  margin: 0 0.5rem;
 }
 
 .controls button:disabled {
