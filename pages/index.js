@@ -24,20 +24,44 @@ if (typeof window !== 'undefined') {
     });
 
     const title = document.createElement('h1');
-    title.innerText = 'Before You Explore';
+    title.innerText = 'Before Continuing!';
     Object.assign(title.style, {
       fontSize: '2.5rem',
       marginBottom: '1rem',
     });
 
     const message = document.createElement('p');
-    message.innerText = 'Please agree to our terms before using the application.';
+    message.innerHTML = `
+      <strong>NaviLink – Terms and Conditions</strong><br><br>
+    
+      <strong>1. Acceptance of Terms:</strong> By using NaviLink, you agree to these Terms and Conditions. If you do not agree, do not use the app.<br><br>
+    
+      <strong>2. Description of Service:</strong> NaviLink is a web-based application that visualizes the shortest path between two points on a map using Dijkstra’s Algorithm. It is provided for educational and informational purposes only.<br><br>
+    
+      <strong>3. User Responsibilities:</strong> Use NaviLink only for lawful purposes. Do not interfere with other users, input false or harmful data, or attempt to reverse-engineer the app.<br><br>
+    
+      <strong>4. Accuracy of Information:</strong> NaviLink does not reflect real-time road conditions or traffic. Route data may not represent actual travel paths. Use at your own discretion.<br><br>
+    
+      <strong>5. Intellectual Property:</strong> All content and code belong to David Wygodski. Unauthorized use is prohibited.<br><br>
+    
+      <strong>6. Limitation of Liability:</strong> NaviLink is provided "as is" without warranties. The developer is not liable for any loss or damage from using the app.<br><br>
+    
+      <strong>7. Modifications:</strong> Terms may be updated at any time. Continued use implies agreement with the latest version.<br><br>
+    
+      <strong>8. Contact:</strong> For questions, contact David Wygodski at <em>wygodskid@ufl.edu</em>.
+    `;
+    
     Object.assign(message.style, {
-      fontSize: '1.2rem',
-      maxWidth: '600px',
-      marginBottom: '1.5rem',
+      fontSize: '1rem',
+      maxWidth: '700px',
+      lineHeight: '1.2',
+      marginBottom: '5.5rem',
+      textAlign: 'left',
+      color: '#f1f1f1'
     });
+    
 
+    
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.id = 'agreeCheckbox';
@@ -48,7 +72,7 @@ if (typeof window !== 'undefined') {
 
     const label = document.createElement('label');
     label.htmlFor = 'agreeCheckbox';
-    label.innerText = 'I agree to the Terms & Conditions';
+    label.innerText = 'I agree to NaviLink Terms & Conditions';
     Object.assign(label.style, {
       fontSize: '1rem',
       color: '#f1f1f1',
@@ -64,7 +88,7 @@ if (typeof window !== 'undefined') {
     checkboxContainer.append(checkbox, label);
 
     const button = document.createElement('button');
-    button.innerText = 'I Understand';
+    button.innerText = 'Continue';
     Object.assign(button.style, {
       padding: '12px 24px',
       fontSize: '1rem',
@@ -200,7 +224,6 @@ export default function Home() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (!localStorage.getItem('termsAccepted') && !termsShown.current) {
-      showTermsOverlay();
       termsShown.current = true;
     }
   }, []);
@@ -232,23 +255,7 @@ export default function Home() {
   }, [activeTab]);
 
   // ─── Overlay Builders ─────────────────────────────────────────────────────
-  function showTermsOverlay() {
-    removeOverlay('termsOverlay');
-    document.body.classList.add('lock-scroll');
-    const overlay = buildOverlay({
-      id: 'termsOverlay',
-      bg: 'rgba(15,32,39,0.75)',
-      title: 'Before You Explore',
-      content: 'Please agree to our terms before using the application.',
-      checkboxLabel: 'I agree to the Terms & Conditions',
-      onAccept: () => {
-        localStorage.setItem('termsAccepted', 'true');
-        fadeRemove('termsOverlay');
-        
-      }
-    });
-    document.body.append(overlay);
-  }
+  
 
   function showDocOverlay() {
     // Remove any existing documentation overlay
@@ -338,7 +345,25 @@ export default function Home() {
   function buildOverlay({ id, bg, title, content, checkboxLabel, onAccept, noCheckbox = false }) {
     const ov = document.createElement('div');
     ov.id = id;
-    Object.assign(ov.style, styles.overlay, { backgroundColor: bg });
+    Object.assign(ov.style, {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      zIndex: '9999',
+      backgroundColor: bg,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'flex-start',   // align content to top
+      textAlign: 'center',
+      overflowY: 'auto',              // allow vertical scrolling
+      padding: '10rem 1rem 2rem',      // ⬅️ top padding increased from 2rem → 6rem
+      boxSizing: 'border-box',
+      textShadow: '0 3px 12px rgba(0, 0, 0, 1)',
+    });
+    
 
     const h1 = document.createElement('h1');
     h1.innerText = title;
@@ -459,48 +484,54 @@ export default function Home() {
 
   return (
     <main className="h-screen w-screen relative overflow-hidden">
-      <Map path={path.slice(0, step+1)} segmentDistances={segmentDistances.slice(0, step)} />
+  <Map path={path.slice(0, step + 1)} segmentDistances={segmentDistances.slice(0, step)} />
 
-      {activeTab === 'map' && (
-        <div className="controls absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 text-white p-4 rounded-xl flex flex-col gap-3 w-[90%] max-w-xl">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={from}
-              onChange={(e) => setFrom(e.target.value)}
-              placeholder="From address"
-              className="flex-1 p-2 rounded bg-black border border-gray-700"
-            />
-            <input
-              type="text"
-              value={to}
-              onChange={(e) => setTo(e.target.value)}
-              placeholder="To address"
-              className="flex-1 p-2 rounded bg-black border border-gray-700"
-            />
-            <button className="px-4 py-2 border rounded" onClick={handleFindPath}>
-              Find Path
-            </button>
-          </div>
-          <div className="text-center text-sm text-gray-300">
-            Total Distance: {(totalDistance * 0.000621371).toFixed(1)} miles
-          </div>
-          <div className="flex justify-center gap-4">
-            <button className="px-3 py-1 rounded border" onClick={handleBack} disabled={step === 0 || !path.length}>
-              Back
-            </button>
-            <button className="px-3 py-1 rounded border" onClick={handlePlay} disabled={playing || !path.length}>
-              Play
-            </button>
-            <button className="px-3 py-1 rounded border" onClick={handleNext} disabled={step >= path.length-1 || !path.length}>
-              Next
-            </button>
-          </div>
+  {activeTab === 'map' && (
+    <div className="controls absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 text-white p-4 rounded-xl flex flex-col gap-3 w-[90%] max-w-xl">
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+          placeholder="From address"
+          className="flex-1 p-2 rounded bg-black border border-gray-700"
+        />
+        <input
+          type="text"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+          placeholder="To address"
+          className="flex-1 p-2 rounded bg-black border border-gray-700"
+        />
+        <button className="px-4 py-2 border rounded" onClick={handleFindPath}>
+          Find Path
+        </button>
+      </div>
+
+      <div className="text-center text-sm text-gray-300">
+        Total Distance: {(totalDistance * 0.000621371).toFixed(1)} Miles
+      </div>
+
+      <div className="footer-row">
+        <div className="button-group">
+          <button className="px-3 py-1 rounded border" onClick={handleBack} disabled={step === 0 || !path.length}>
+            Back
+          </button>
+          <button className="px-3 py-1 rounded border" onClick={handlePlay} disabled={playing || !path.length}>
+            Play
+          </button>
+          <button className="px-3 py-1 rounded border" onClick={handleNext} disabled={step >= path.length - 1 || !path.length}>
+            Next
+          </button>
         </div>
-      )}
-
-      <TopTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-    </main>
+        <div className="copyright-left">
+          © Elan Wygodski | v1.0
+        </div>
+      </div>
+    </div>
+  )}
+  <TopTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+</main>
   );
 }
 
