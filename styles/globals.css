@@ -32,10 +32,10 @@ a {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  background: rgba(255, 255, 255, 0.5); /* <-- transparency level */
+  background: rgba(154, 154, 154, 0.5); /* <-- transparency level */
   backdrop-filter: blur(4px); /* <-- blur strength */
-  border-top: 3px solid rgb(9, 141, 241);
-  border-bottom: 3px solid rgb(9, 141, 241);
+  border-top: 2px solid rgb(9, 141, 241);
+  border-bottom: 2px solid rgb(9, 141, 241);
 }
 .controls .row {
   display: flex;
@@ -96,3 +96,8 @@ a {
     background: black;
   }
 }
+
+
+
+
+
