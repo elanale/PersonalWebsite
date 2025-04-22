@@ -1,11 +1,14 @@
-// pages/index.js
-
-// ─── Intro (Terms) Overlay ────────────────────────────────────────────────────
-if (typeof window !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => {
+//Agree to Terms Overlay
+if (typeof window !== 'undefined') 
+  {
+  document.addEventListener('DOMContentLoaded', () => 
+    {
     const overlay = document.createElement('div');
     overlay.id = 'introOverlay';
-    Object.assign(overlay.style, {
+
+    //overlay style
+    Object.assign(overlay.style, 
+      {
       position: 'fixed',
       top: 0,
       left: 0,
@@ -26,7 +29,8 @@ if (typeof window !== 'undefined') {
 
     const title = document.createElement('h1');
     title.innerText = 'Before Continuing!';
-    Object.assign(title.style, {
+    Object.assign(title.style, 
+    {
       fontSize: '2.5rem',
       marginBottom: '1rem',
       marginTop: '10rem',
@@ -53,7 +57,8 @@ if (typeof window !== 'undefined') {
       <strong>8. Contact:</strong> For questions, contact David Wygodski at <em>wygodskid@ufl.edu</em>.
     `;
     
-    Object.assign(message.style, {
+    Object.assign(message.style, 
+    {
       fontSize: '1rem',
       maxWidth: '700px',
       lineHeight: '1.2',
@@ -65,9 +70,12 @@ if (typeof window !== 'undefined') {
 
     
     const checkbox = document.createElement('input');
+
     checkbox.type = 'checkbox';
     checkbox.id = 'agreeCheckbox';
-    Object.assign(checkbox.style, {
+
+    Object.assign(checkbox.style, 
+    {
       transform: 'scale(1.2)',
       marginRight: '0.5rem',
     });
@@ -75,23 +83,31 @@ if (typeof window !== 'undefined') {
     const label = document.createElement('label');
     label.htmlFor = 'agreeCheckbox';
     label.innerText = 'I agree to NaviLink Terms & Conditions';
-    Object.assign(label.style, {
+
+    Object.assign(label.style, 
+    {
       fontSize: '1rem',
       color: '#f1f1f1',
     });
 
     const checkboxContainer = document.createElement('div');
-    Object.assign(checkboxContainer.style, {
+
+    Object.assign(checkboxContainer.style, 
+    {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: '1.5rem',
     });
+
+
     checkboxContainer.append(checkbox, label);
 
     const button = document.createElement('button');
     button.innerText = 'Continue';
-    Object.assign(button.style, {
+
+    Object.assign(button.style, 
+    {
       padding: '12px 24px',
       fontSize: '1rem',
       background: '#00c6ff',
@@ -104,19 +120,26 @@ if (typeof window !== 'undefined') {
     });
     button.disabled = true;
 
-    checkbox.addEventListener('change', () => {
+
+    checkbox.addEventListener('change', () => 
+    {
       button.disabled = !checkbox.checked;
       button.style.opacity = checkbox.checked ? '1' : '0.6';
     });
 
-    button.addEventListener('click', () => {
+
+    button.addEventListener('click', () => 
+    {
       overlay.style.opacity = '0';
       document.body.classList.remove('lock-scroll');
       setTimeout(() => overlay.remove(), 600);
     });
 
+
     const scrollBox = document.createElement('div');
-    Object.assign(scrollBox.style, {
+
+    Object.assign(scrollBox.style, 
+    {
       maxHeight: '60vh',
       overflowY: 'auto',
       paddingRight: '1rem',
@@ -133,19 +156,24 @@ if (typeof window !== 'undefined') {
     document.body.classList.add('lock-scroll');
   });
 
+
   const style = document.createElement('style');
+
   style.textContent = `
     body.lock-scroll { overflow: hidden !important; }
   `;
+
   document.head.append(style);
 }
 
 
 
 
-// ─── Imports & Dijkstra Setup ────────────────────────────────────────────────
-// pages/index.js
 
+
+
+
+//Imports/seting up Dijkstra alg
 import dynamic from 'next/dynamic';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
@@ -154,13 +182,20 @@ import { dijkstra } from '../utils/dijkstraFromCSV';
 
 const Map = dynamic(() => import('../components/Map'), { ssr: false });
 
-// ─── Top Tabs ───────────────────────────────────────────────────────────────
-function TopTabs({ activeTab, setActiveTab }) {
+
+
+//ViewMap and Documentation top tabs
+function TopTabs({ activeTab, setActiveTab }) 
+{
+
   const [mounted, setMounted] = useState(false);
-  useEffect(() => {
+  useEffect(() => 
+  {
     setMounted(true);
     return () => setMounted(false);
   }, []);
+
+  
   if (!mounted || typeof document === 'undefined') return null;
 
   return createPortal(
@@ -223,10 +258,14 @@ function TopTabs({ activeTab, setActiveTab }) {
 
 
 
-// ─── Main Page ──────────────────────────────────────────────────────────────
-export default function Home() {
+
+
+
+//Main Page
+export default function Home() 
+{
   const [activeTab, setActiveTab] = useState('map');
-  const [from, setFrom] = useState('3150 Hull Rd, Gainesville, FL 32611');
+  const [from, setFrom] = useState('Southwest Recreation Center');
   const [to, setTo] = useState('Marston Science Library');
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -235,23 +274,31 @@ export default function Home() {
   const [totalDistance, setTotalDistance] = useState(0);
   const termsShown = useRef(false);
 
-  // Show Terms overlay on first load
-  useEffect(() => {
+  
+  //terms page shown when reloading or first loggin in
+  useEffect(() => 
+  {
     if (typeof window === 'undefined') return;
-    if (!localStorage.getItem('termsAccepted') && !termsShown.current) {
+    if (!localStorage.getItem('termsAccepted') && !termsShown.current) 
+    {
       termsShown.current = true;
     }
   }, []);
 
-  // Auto‑play when path is set
-  useEffect(() => {
-    if (path.length > 1 && step === 0 && !playing) {
+
+  //whne two paths are initialized the auto play works
+  useEffect(() => 
+    {
+    if (path.length > 1 && step === 0 && !playing) 
+    {
       handlePlay();
     }
   }, [path]);
 
-  // Persist scroll-lock style
-  useEffect(() => {
+
+  //scroll-locking
+  useEffect(() => 
+  {
     const style = document.createElement('style');
     style.id = 'lockScrollStyle';
     style.textContent = 'body.lock-scroll { overflow: hidden !important; }';
@@ -259,9 +306,12 @@ export default function Home() {
     return () => document.getElementById('lockScrollStyle')?.remove();
   }, []);
 
-  // Toggle documentation overlay
-  useEffect(() => {
-    if (activeTab === 'documentation') {
+
+  //documentation overlay toggling feature
+  useEffect(() => 
+  {
+    if (activeTab === 'documentation') 
+    {
       showDocOverlay();
     } else {
       removeOverlay('docOverlay');
@@ -269,19 +319,22 @@ export default function Home() {
     }
   }, [activeTab]);
 
-  // ─── Overlay Builders ─────────────────────────────────────────────────────
-  
 
-  function showDocOverlay() {
-    // Remove any existing documentation overlay
+
+  //overlay constructors
+  function showDocOverlay() 
+  {
+    //overlay removal 
     removeOverlay('docOverlay');
-    // Lock page scrolling
+
+    //lock scrolling
     document.body.classList.add('lock-scroll');
   
     // Build and insert the overlay
-    const overlay = buildOverlay({
+    const overlay = buildOverlay(
+    {
       id: 'docOverlay',
-      bg: 'rgba(15,32,39,0.8)',            // semi‑transparent background
+      bg: 'rgba(15,32,39,0.9)',            
       title: 'Documentation',
       content: (() => {
         const wrapper = document.createElement('div');
@@ -331,11 +384,13 @@ export default function Home() {
         return wrapper;
       })(),
       
-      noCheckbox: true,                    // just a Close button, no checkbox
-      onAccept: () => {
-        // Fade out and remove the overlay…
+      noCheckbox: true,
+      onAccept: () => 
+      {
+        //remove and fade overlay on exit
         fadeRemove('docOverlay');
-        // …and switch back to the Map tab
+
+        //switch back to 'Map View'
         setActiveTab('map');
       }
     });
@@ -344,12 +399,15 @@ export default function Home() {
   }
   
 
-  function removeOverlay(id) {
+  function removeOverlay(id) 
+  {
     const existing = document.getElementById(id);
     if (existing) existing.remove();
   }
 
-  function fadeRemove(id) {
+  
+  function fadeRemove(id) 
+  {
     const el = document.getElementById(id);
     if (!el) return;
     el.style.opacity = '0';
@@ -357,10 +415,14 @@ export default function Home() {
     document.body.classList.remove('lock-scroll');
   }
 
-  function buildOverlay({ id, bg, title, content, checkboxLabel, onAccept, noCheckbox = false }) {
+
+  function buildOverlay({ id, bg, title, content, checkboxLabel, onAccept, noCheckbox = false }) 
+  {
     const ov = document.createElement('div');
     ov.id = id;
-    Object.assign(ov.style, {
+
+    Object.assign(ov.style, 
+    {
       position: 'fixed',
       top: 0,
       left: 0,
@@ -371,10 +433,10 @@ export default function Home() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'flex-start',   // align content to top
+      justifyContent: 'flex-start',   
       textAlign: 'center',
-      overflowY: 'auto',              // allow vertical scrolling
-      padding: '10rem 1rem 2rem',      // ⬅️ top padding increased from 2rem → 6rem
+      overflowY: 'auto',              
+      padding: '10rem 1rem 2rem',
       boxSizing: 'border-box',
       textShadow: '0 3px 12px rgba(0, 0, 0, 1)',
     });
@@ -382,27 +444,41 @@ export default function Home() {
 
     const h1 = document.createElement('h1');
     h1.innerText = title;
+
     Object.assign(h1.style, styles.overlayTitle);
 
+
     const p = document.createElement('p');
+
     if (typeof content === 'string') p.innerText = content;
     else p.append(content);
+
     Object.assign(p.style, styles.overlayMsg);
 
+
+
     let acceptBtn;
-    if (!noCheckbox) {
+
+    if (!noCheckbox) 
+    {
       const chk = document.createElement('input'); chk.type = 'checkbox'; chk.id = id + 'Chk';
       Object.assign(chk.style, { marginRight: '0.5rem', transform: 'scale(1.2)' });
+
       const lbl = document.createElement('label'); lbl.htmlFor = chk.id; lbl.innerText = checkboxLabel;
       Object.assign(lbl.style, { color: '#f1f1f1', fontSize: '1rem' });
+
       const boxC = document.createElement('div'); Object.assign(boxC.style, { display: 'flex', alignItems: 'center', marginBottom: '1rem' });
+
       boxC.append(chk, lbl);
 
       acceptBtn = document.createElement('button');
       acceptBtn.innerText = 'I Understand';
+
       Object.assign(acceptBtn.style, styles.acceptBtn, { opacity: '0.6', cursor: 'not-allowed' });
       acceptBtn.disabled = true;
-      chk.addEventListener('change', () => {
+
+      chk.addEventListener('change', () => 
+      {
         acceptBtn.disabled = !chk.checked;
         acceptBtn.style.opacity = chk.checked ? '1' : '0.6';
         acceptBtn.style.cursor = chk.checked ? 'pointer' : 'not-allowed';
@@ -410,7 +486,8 @@ export default function Home() {
       acceptBtn.addEventListener('click', onAccept);
 
       ov.append(h1, p, boxC, acceptBtn);
-    } else {
+    } else 
+    {
       acceptBtn = document.createElement('button');
       acceptBtn.innerText = 'Close';
       Object.assign(acceptBtn.style, styles.acceptBtn);
@@ -421,12 +498,15 @@ export default function Home() {
     return ov;
   }
 
-  // ─── Pathfinding & Controls ───────────────────────────────────────────────
-  const handlePlay = () => {
+  //UI Control
+  const handlePlay = () => 
+  {
     if (playing || path.length === 0) return;
     setPlaying(true);
     let i = step;
-    const iv = setInterval(() => {
+
+    const iv = setInterval(() => 
+    {
       if (i >= path.length - 1) { clearInterval(iv); setPlaying(false); return; }
       i++; setStep(i);
     }, 500);
@@ -435,15 +515,23 @@ export default function Home() {
   const handleBack = () => step > 0 && setStep(step - 1);
   const handleNext = () => step < path.length - 1 && setStep(step + 1);
 
-  const geocode = async (q) => {
+
+
+  const geocode = async (q) => 
+  {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`;
     const res = await axios.get(url, { headers: { 'Accept-Language': 'en' } });
-    if (!res.data || res.data.length === 0) throw new Error('Address not found');
+
+    if (!res.data || res.data.length === 0) throw new Error('Could Not Find Address');
     return [parseFloat(res.data[0].lat), parseFloat(res.data[0].lon)];
   };
 
-  const handleFindPath = async () => {
-    try {
+
+
+  const handleFindPath = async () => 
+    {
+    try 
+    {
       const fromC = await geocode(from);
       const toC = await geocode(to);
 
@@ -452,46 +540,64 @@ export default function Home() {
         fetch('/node_coords.json').then((r) => r.json()),
       ]);
 
+
       const graph = {};
-      graphCsv.trim().split('\n').slice(1).forEach((line) => {
+      graphCsv.trim().split('\n').slice(1).forEach((line) => 
+      {
         const [u, v, d] = line.split(',').map((s) => s.trim());
         const dist = parseFloat(d);
+
         if (isNaN(dist)) return;
+
         graph[u] = graph[u] || [];
         graph[v] = graph[v] || [];
         graph[u].push([v, dist]);
         graph[v].push([u, dist]);
       });
+      
 
-      const findNearest = (lat, lon) => {
+      const findNearest = (lat, lon) => 
+      {
         let best = null, bestD = Infinity;
-        for (const [id, [nodeLon, nodeLat]] of Object.entries(coordsJson)) {
+
+        for (const [id, [nodeLon, nodeLat]] of Object.entries(coordsJson)) 
+        {
+
           if (!graph[id]) continue;
+
           const dx = lat - nodeLat, dy = lon - nodeLon;
           const d2 = dx * dx + dy * dy;
+
           if (d2 < bestD) { bestD = d2; best = id; }
         }
         return best;
       };
 
+
       const start = findNearest(fromC[0], fromC[1]);
       const end = findNearest(toC[0], toC[1]);
-      if (!start || !end) throw new Error('Could not match address to graph');
+
+      if (!start || !end) throw new Error('Address to graph missmatch');
 
       const { path: nodePath, segmentDistances: segs, totalDistance: tot } = dijkstra(graph, start, end);
 
       const realCoords = nodePath.map((id) => coordsJson[id]||[]).filter(c=>c.length===2).map(([lon,lat])=>[lat,lon]);
-      const mappedSegs = segs.map(({ from, to, distance }) => ({
+
+      const mappedSegs = segs.map(({ from, to, distance }) => (
+      {
         from: [coordsJson[from][1], coordsJson[from][0]],
         to: [coordsJson[to][1], coordsJson[to][0]],
         distance,
       }));
 
+
       setPath(realCoords);
       setSegmentDistances(mappedSegs);
       setTotalDistance(tot);
       setStep(0);
-    } catch (err) {
+
+    } catch (err) 
+    {
       alert('Error: ' + err.message);
       console.error(err);
     }
@@ -550,20 +656,32 @@ export default function Home() {
   );
 }
 
-const styles = {
-  tabContainer: {
+const styles = 
+{
+
+  tabContainer: 
+  {
     position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 10000,
     display: 'flex', background: 'rgba(0,0,0,0.7)', padding: '4px', borderRadius: 8, boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
   },
+
   tab: { padding: '8px 16px', background: 'transparent', color: 'white', border: 'none', cursor: 'pointer' },
+
   tabActive: { padding: '8px 16px', background: 'white', color: 'black', border: 'none', cursor: 'pointer', borderRadius: 6 },
-  overlay: {
+
+  overlay: 
+  {
     position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: '9999',
     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', transition: 'opacity 0.6s ease'
   },
+
   overlayTitle: { fontSize: '2.5rem', marginBottom: '1rem', color: '#f1f1f1' },
+
   overlayMsg: { fontSize: '1.2rem', maxWidth: '600px', marginBottom: '1rem', color: '#f1f1f1' },
-  acceptBtn: {
+
+  acceptBtn: 
+  {
     padding: '12px 24px', fontSize: '1rem', background: '#00c6ff', border: 'none', borderRadius: '6px', color: 'black', cursor: 'pointer'
   }
+  
 };
