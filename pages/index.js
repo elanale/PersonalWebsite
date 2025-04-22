@@ -14,6 +14,7 @@ if (typeof window !== 'undefined') {
       background: 'rgba(15, 32, 39, 0.75)',
       zIndex: '9999',
       color: '#f1f1f1',
+      overflowY: 'auto',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -28,6 +29,7 @@ if (typeof window !== 'undefined') {
     Object.assign(title.style, {
       fontSize: '2.5rem',
       marginBottom: '1rem',
+      marginTop: '10rem',
     });
 
     const message = document.createElement('p');
@@ -113,7 +115,20 @@ if (typeof window !== 'undefined') {
       setTimeout(() => overlay.remove(), 600);
     });
 
-    overlay.append(title, message, checkboxContainer, button);
+    const scrollBox = document.createElement('div');
+    Object.assign(scrollBox.style, {
+      maxHeight: '60vh',
+      overflowY: 'auto',
+      paddingRight: '1rem',
+      marginBottom: '1.5rem',
+    });
+    scrollBox.appendChild(message);
+
+    overlay.append(title, scrollBox, checkboxContainer, button);
+
+
+
+
     document.body.append(overlay);
     document.body.classList.add('lock-scroll');
   });
