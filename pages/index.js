@@ -342,16 +342,16 @@ function showDocOverlay()
           <div style="margin-bottom: 20px;">
             <h2 style="text-align: center;">Demo Video</h2>
             <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px;">
-              <iframe 
+              <iframe
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
-                src="https://www.youtube.com/watch?v=BVJ-RZ95AnM" 
-                title="YouTube video player" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                src="https://www.youtube.com/embed/BVJ-RZ95AnM"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
               </iframe>
             </div>
           </div>
-
           <h2 style="text-align: center;">How to Use the Map Visualizer</h2>
           <p>This tool helps you visualize the shortest path between two addresses using Dijkstra's algorithm. Follow the steps below to get started.</p>
           <h3>1. Enter Start and Destination Addresses</h3>
