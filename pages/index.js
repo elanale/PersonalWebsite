@@ -321,82 +321,86 @@ export default function Home()
 
 
 
-  //overlay constructors
-  function showDocOverlay() 
+//overlay constructors
+function showDocOverlay()
+{
+  //overlay removal
+  removeOverlay('docOverlay');
+  //lock scrolling
+  document.body.classList.add('lock-scroll');
+  // Build and insert the overlay
+  const overlay = buildOverlay(
   {
-    //overlay removal 
-    removeOverlay('docOverlay');
-
-    //lock scrolling
-    document.body.classList.add('lock-scroll');
-  
-    // Build and insert the overlay
-    const overlay = buildOverlay(
-    {
-      id: 'docOverlay',
-      bg: 'rgba(15,32,39,0.9)',            
-      title: 'Documentation',
-      content: (() => {
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = `
-          <div style="max-width: 700px; max-height: 70vh; overflow-y: auto; padding-right: 1rem; text-align: left; color: #f1f1f1; font-size: 1rem; line-height: 1.6;">
-            <h2>How to Use the Map Visualizer</h2>
-            <p>This tool helps you visualize the shortest path between two addresses using Dijkstra's algorithm. Follow the steps below to get started.</p>
-      
-            <h3>1. Enter Start and Destination Addresses</h3>
-            <ul>
-              <li><strong>From:</strong> Enter your starting address (e.g., <em>3150 Hull Rd, Gainesville, FL</em>).</li>
-              <li><strong>To:</strong> Enter your destination (e.g., <em>Marston Science Library</em>).</li>
-              <li>Click the <strong>"Find Path"</strong> button to generate the route.</li>
-            </ul>
-      
-            <h3>2. How It Works</h3>
-            <p>
-              The app converts the addresses into geographic coordinates using OpenStreetMap's geocoding service. 
-              It then finds the nearest nodes in the graph and calculates the shortest path between them using Dijkstra’s algorithm. 
-              This path is drawn on the map using real coordinates and distances.
-            </p>
-      
-            <h3>3. Interactive Map Features</h3>
-            <ul>
-              <li>The path is shown as a series of connected lines on the map.</li>
-              <li>Each segment is revealed step-by-step to show the routing progress.</li>
-              <li>Total distance is calculated and displayed in miles.</li>
-            </ul>
-      
-            <h3>4. Playback Controls</h3>
-            <ul>
-              <li><strong>Back:</strong> Move to the previous step in the path.</li>
-              <li><strong>Play:</strong> Animate through the entire path automatically.</li>
-              <li><strong>Next:</strong> Move forward one segment at a time.</li>
-            </ul>
-      
-            <h3>5. Technical Details</h3>
-            <ul>
-              <li><strong>Frontend:</strong> Next.js and React</li>
-              <li><strong>Map Rendering:</strong> Leaflet with custom React components</li>
-              <li><strong>Algorithm:</strong> Dijkstra’s Algorithm for pathfinding</li>
-              <li><strong>Data Sources:</strong> CSV (graph edges), JSON (node coordinates)</li>
-              <li><strong>Geocoding:</strong> OpenStreetMap Nominatim API</li>
-            </ul>
+    id: 'docOverlay',
+    bg: 'rgba(15,32,39,0.9)',
+    title: 'Documentation',
+    content: (() => {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = `
+        <div style="max-width: 700px; max-height: 70vh; overflow-y: auto; padding-right: 1rem; text-align: left; color: #f1f1f1; font-size: 1rem; line-height: 1.6;">
+          <!-- YouTube Video Embed at Top -->
+          <div style="margin-bottom: 20px;">
+            <h2 style="text-align: center;">Demo Video</h2>
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px;">
+              <iframe 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                src="https://www.youtube.com/watch?v=BVJ-RZ95AnM" 
+                title="YouTube video player" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+              </iframe>
+            </div>
           </div>
-        `;
-        return wrapper;
-      })(),
-      
-      noCheckbox: true,
-      onAccept: () => 
-      {
-        //remove and fade overlay on exit
-        fadeRemove('docOverlay');
 
-        //switch back to 'Map View'
-        setActiveTab('map');
-      }
-    });
-  
-    document.body.append(overlay);
-  }
+          <h2 style="text-align: center;">How to Use the Map Visualizer</h2>
+          <p>This tool helps you visualize the shortest path between two addresses using Dijkstra's algorithm. Follow the steps below to get started.</p>
+          <h3>1. Enter Start and Destination Addresses</h3>
+          <ul>
+            <li><strong>From:</strong> Enter your starting address (e.g., <em>3150 Hull Rd, Gainesville, FL</em>).</li>
+            <li><strong>To:</strong> Enter your destination (e.g., <em>Marston Science Library</em>).</li>
+            <li>Click the <strong>"Find Path"</strong> button to generate the route.</li>
+          </ul>
+          <h3>2. How It Works</h3>
+          <p>
+            The app converts the addresses into geographic coordinates using OpenStreetMap's geocoding service.
+            It then finds the nearest nodes in the graph and calculates the shortest path between them using Dijkstra's algorithm.
+            This path is drawn on the map using real coordinates and distances.
+          </p>
+          <h3>3. Interactive Map Features</h3>
+          <ul>
+            <li>The path is shown as a series of connected lines on the map.</li>
+            <li>Each segment is revealed step-by-step to show the routing progress.</li>
+            <li>Total distance is calculated and displayed in miles.</li>
+          </ul>
+          <h3>4. Playback Controls</h3>
+          <ul>
+            <li><strong>Back:</strong> Move to the previous step in the path.</li>
+            <li><strong>Play:</strong> Animate through the entire path automatically.</li>
+            <li><strong>Next:</strong> Move forward one segment at a time.</li>
+          </ul>
+          <h3>5. Technical Details</h3>
+          <ul>
+            <li><strong>Frontend:</strong> Next.js and React</li>
+            <li><strong>Map Rendering:</strong> Leaflet with custom React components</li>
+            <li><strong>Algorithm:</strong> Dijkstra's Algorithm for pathfinding</li>
+            <li><strong>Data Sources:</strong> CSV (graph edges), JSON (node coordinates)</li>
+            <li><strong>Geocoding:</strong> OpenStreetMap Nominatim API</li>
+          </ul>
+        </div>
+      `;
+      return wrapper;
+    })(),
+    noCheckbox: true,
+    onAccept: () =>
+    {
+      //remove and fade overlay on exit
+      fadeRemove('docOverlay');
+      //switch back to 'Map View'
+      setActiveTab('map');
+    }
+  });
+  document.body.append(overlay);
+}
   
 
   function removeOverlay(id) 
