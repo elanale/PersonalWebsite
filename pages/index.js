@@ -15,7 +15,7 @@ if (typeof window !== 'undefined')
       width: '100%',
       height: '100%',
       background: 'rgba(15, 32, 39, 0.75)',
-      zIndex: '9999',
+      zIndex: '999999',
       color: '#f1f1f1',
       overflowY: 'auto',
       display: 'flex',
@@ -23,22 +23,24 @@ if (typeof window !== 'undefined')
       alignItems: 'center',
       justifyContent: 'center',
       textAlign: 'center',
-      backdropFilter: 'blur(3px)',
-      transition: 'opacity 0.6s ease',
+      backdropFilter: 'blur(5px)',
+      transition: 'opacity 0.9s ease',
     });
 
     const title = document.createElement('h1');
-    title.innerText = 'Before Continuing!';
+    title.innerText = 'NaviLink';
     Object.assign(title.style, 
     {
       fontSize: '2.5rem',
-      marginBottom: '1rem',
-      marginTop: '10rem',
+      marginBottom: '2rem',
+      marginTop: '2rem',
     });
 
     const message = document.createElement('p');
     message.innerHTML = `
-      <strong>NaviLink – Terms and Conditions</strong><br><br>
+      <div style="text-align: center;">
+        <strong>Terms and Conditions</strong><br><br>
+      </div>
     
       <strong>1. Acceptance of Terms:</strong> By using NaviLink, you agree to these Terms and Conditions. If you do not agree, do not use the app.<br><br>
     
@@ -59,10 +61,11 @@ if (typeof window !== 'undefined')
     
     Object.assign(message.style, 
     {
-      fontSize: '1rem',
-      maxWidth: '700px',
+      fontSize: '1.3rem',
+      width: '99%',
+      marginLeft: '1.0rem',
       lineHeight: '1.2',
-      marginBottom: '5.5rem',
+      marginBottom: '1.5rem',
       textAlign: 'left',
       color: '#f1f1f1'
     });
@@ -76,8 +79,8 @@ if (typeof window !== 'undefined')
 
     Object.assign(checkbox.style, 
     {
-      transform: 'scale(1.2)',
-      marginRight: '0.5rem',
+      transform: 'scale(1.3)',
+      marginRight: '0.8rem',
     });
 
     const label = document.createElement('label');
@@ -86,10 +89,12 @@ if (typeof window !== 'undefined')
 
     Object.assign(label.style, 
     {
-      fontSize: '1rem',
+      fontSize: '1.0rem',
+      fontWeight: 'bold',
       color: '#f1f1f1',
     });
 
+    
     const checkboxContainer = document.createElement('div');
 
     Object.assign(checkboxContainer.style, 
@@ -108,15 +113,17 @@ if (typeof window !== 'undefined')
 
     Object.assign(button.style, 
     {
-      padding: '12px 24px',
-      fontSize: '1rem',
+      padding: '12px 54px',
+      fontSize: '1.5rem',
       background: '#00c6ff',
       border: 'none',
-      borderRadius: '6px',
+      borderRadius: '20px',
       color: 'black',
       cursor: 'pointer',
-      opacity: 0.6,
-      transition: 'opacity 0.2s ease',
+      opacity: 0.0,
+      transition: 'opacity 0.5s ease',
+      marginBottom: '1.5rem',
+
     });
     button.disabled = true;
 
@@ -124,7 +131,7 @@ if (typeof window !== 'undefined')
     checkbox.addEventListener('change', () => 
     {
       button.disabled = !checkbox.checked;
-      button.style.opacity = checkbox.checked ? '1' : '0.6';
+      button.style.opacity = checkbox.checked ? '1' : '0.0';
     });
 
 
@@ -432,7 +439,7 @@ function showDocOverlay()
       left: 0,
       width: '100%',
       height: '100%',
-      zIndex: '9999',
+      zIndex: '2000',
       backgroundColor: bg,
       display: 'flex',
       flexDirection: 'column',
@@ -440,7 +447,7 @@ function showDocOverlay()
       justifyContent: 'flex-start',   
       textAlign: 'center',
       overflowY: 'auto',              
-      padding: '10rem 1rem 2rem',
+      padding: '8rem 1rem 3rem',
       boxSizing: 'border-box',
       textShadow: '0 3px 12px rgba(0, 0, 0, 1)',
     });
@@ -494,6 +501,8 @@ function showDocOverlay()
     {
       acceptBtn = document.createElement('button');
       acceptBtn.innerText = 'Close';
+      styles.acceptBtn.fontWeight = 'bold';
+
       Object.assign(acceptBtn.style, styles.acceptBtn);
       acceptBtn.addEventListener('click', onAccept);
       ov.append(h1, p, acceptBtn);
@@ -650,7 +659,7 @@ function showDocOverlay()
           </button>
         </div>
         <div className="copyright-left">
-          © Elan Wygodski | v1.0
+          © By Elan Wygodski | v1.0
         </div>
       </div>
     </div>
@@ -685,7 +694,7 @@ const styles =
 
   acceptBtn: 
   {
-    padding: '12px 24px', fontSize: '1rem', background: '#00c6ff', border: 'none', borderRadius: '6px', color: 'black', cursor: 'pointer'
+    padding: '12px 54px', fontSize: '1rem', background: '#00c6ff', border: 'none', borderRadius: '20px', color: 'black', cursor: 'pointer', marginTop: '1.0rem',
   }
   
 };

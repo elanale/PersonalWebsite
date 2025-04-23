@@ -125,8 +125,8 @@ export default function Map({ path, segmentDistances })
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
       />
+      
       {path.length > 1 && <Polyline
         positions={path}
         color="blue"
@@ -143,3 +143,4 @@ export default function Map({ path, segmentDistances })
     </MapContainer>
   );
 }
+
