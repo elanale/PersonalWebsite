@@ -1,7 +1,8 @@
-import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
+import { Marker, useMap, MapContainer, TileLayer, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import styles from "./UserPulse.module.css";
 
 //chart plot icon pin
 delete L.Icon.Default.prototype._getIconUrl;
@@ -52,9 +53,67 @@ function DistanceLabels({ segmentDistances })
 }
 
 
+//---realtime gps tracking--
+function UserLocationTracker() 
+{
+  const [position, setPosition] = useState(null);
+  const [followUser, setFollowUser] = useState(false);
+  const hasCentered = useRef(false);
+  const map = useMap();
+
+  useEffect(() => 
+  {
+    if (!navigator.geolocation) return;
+
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => 
+      {
+        const newPos = [pos.coords.latitude, pos.coords.longitude];
+        setPosition(newPos);
+
+        if (map && !hasCentered.current) 
+        {
+          map.setView(newPos, map.getZoom());
+          hasCentered.current = true;
+        }
+
+        if (map && followUser) 
+        {
+          map.setView(newPos, map.getZoom());
+        }
+      },
+      (err) => console.error("Geolocation error:", err.message),
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, [map, followUser]);
+
+  return position ? (
+    <Marker
+      position={position}
+      icon={L.divIcon({
+        className: `${styles.pulseMarker} ${followUser ? styles.following : ''}`,
+        html: "You",
+        iconSize: [35, 35],
+      })}
+      eventHandlers={
+    {
+        click: () => setFollowUser((prev) => !prev),
+      }}
+    />
+  ) : null;
+}
+
+
 //path renderer
 export default function Map({ path, segmentDistances }) 
-    {
+{
   const start = path[0];
   const end = path[path.length - 1];
 
@@ -71,71 +130,16 @@ export default function Map({ path, segmentDistances })
       {path.length > 1 && <Polyline
         positions={path}
         color="blue"
-        weight={5}           //line thikness
-        opacity={0.6}        //make line transparent or not
-        lineCap="round"      //round edges
-        smoothFactor={10}   //curve smoothness
-/>
-}
+        weight={5} //line thikness
+        opacity={0.6} //make line transparent or not
+        lineCap="round" //round edges
+        smoothFactor={10} //curve smoothness
+      />}
+
       {start && <Marker position={start} />}
       {end && path.length > 1 && <Marker position={end} />}
       {segmentDistances && <DistanceLabels segmentDistances={segmentDistances} />}
-
-
-
       <UserLocationTracker />
     </MapContainer>
   );
 }
-
-
-
-//---realtime gps tracking--
-import { useState } from "react";
-import styles from "./UserPulse.module.css";
-
-
-function UserLocationTracker() 
-{
-    const [position, setPosition] = useState(null);
-    const map = useMap();
-  
-    useEffect(() => 
-    {
-      if (!navigator.geolocation) return;
-  
-      const watchId = navigator.geolocation.watchPosition(
-        (pos) => 
-        {
-          const newPos = [pos.coords.latitude, pos.coords.longitude];
-          setPosition(newPos);
-          if (map) map.setView(newPos, map.getZoom());
-        },
-
-        (err) => console.error('Geolocation error:', err.message),
-
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0,
-        }
-      );
-  
-      return () => navigator.geolocation.clearWatch(watchId);
-    }, [map]);
-  
-
-    return position ? (
-        <Marker
-        position={position}
-        icon={L.divIcon(
-
-        {
-          className: styles.pulseMarker,
-          html: 'You', //text in the blue dot
-          iconSize: [35, 35], //blue dot size
-        })}
-      />      
-    ) : null;
-  }
-  
