@@ -42,7 +42,7 @@ if (typeof window !== 'undefined')
     
       <strong>1. Acceptance of Terms:</strong> By using NaviLink, you agree to these Terms and Conditions. If you do not agree, do not use the app.<br><br>
     
-      <strong>2. Description of Service:</strong> NaviLink is a web-based application that visualizes the shortest path between two points on a map using Dijkstra’s Algorithm. It is provided for educational and informational purposes only.<br><br>
+      <strong>2. Description of Service:</strong> NaviLink is a web-based application that visualizes the shortest path between two points on a map using Dijkstra’s Algorithm. NaviLink also uses the user's real time GPS. It is provided for educational and informational purposes only.<br><br>
     
       <strong>3. User Responsibilities:</strong> Use NaviLink only for lawful purposes. Do not interfere with other users, input false or harmful data, or attempt to reverse-engineer the app.<br><br>
     
