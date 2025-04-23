@@ -80,6 +80,62 @@ export default function Map({ path, segmentDistances })
       {start && <Marker position={start} />}
       {end && path.length > 1 && <Marker position={end} />}
       {segmentDistances && <DistanceLabels segmentDistances={segmentDistances} />}
+
+
+
+      <UserLocationTracker />
     </MapContainer>
   );
 }
+
+
+
+//---realtime gps tracking--
+import { useState } from "react";
+import styles from "./UserPulse.module.css";
+
+
+function UserLocationTracker() 
+{
+    const [position, setPosition] = useState(null);
+    const map = useMap();
+  
+    useEffect(() => 
+    {
+      if (!navigator.geolocation) return;
+  
+      const watchId = navigator.geolocation.watchPosition(
+        (pos) => 
+        {
+          const newPos = [pos.coords.latitude, pos.coords.longitude];
+          setPosition(newPos);
+          if (map) map.setView(newPos, map.getZoom());
+        },
+
+        (err) => console.error('Geolocation error:', err.message),
+
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }
+      );
+  
+      return () => navigator.geolocation.clearWatch(watchId);
+    }, [map]);
+  
+
+    return position ? (
+        <Marker
+        position={position}
+        icon={L.divIcon(
+
+        {
+          className: styles.pulseMarker,
+          html: 'You', //text in the blue dot
+          iconSize: [35, 35], //blue dot size
+        })}
+      />      
+    ) : null;
+  }
+  
