@@ -19,6 +19,7 @@ if (typeof window !== 'undefined')
       color: '#f1f1f1',
       overflowY: 'auto',
       display: 'flex',
+      
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
@@ -31,7 +32,7 @@ if (typeof window !== 'undefined')
     title.innerText = 'NaviLink';
     Object.assign(title.style, 
     {
-      fontSize: '2.5rem',
+      fontSize: '4.5rem',
       marginBottom: '2rem',
       marginTop: '2rem',
     });
@@ -64,10 +65,11 @@ if (typeof window !== 'undefined')
       fontSize: '1.3rem',
       width: '99%',
       marginLeft: '1.0rem',
-      lineHeight: '1.2',
+      lineHeight: '1.4',
       marginBottom: '1.5rem',
       textAlign: 'left',
-      color: '#f1f1f1'
+      color: '#f1f1f1',
+      maxWidth: '600px',
     });
     
 
